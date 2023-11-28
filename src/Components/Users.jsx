@@ -4,7 +4,7 @@ import logo from '../Images/live-chat.png';
 import { IconButton } from '@mui/material';
 import { Search } from '@mui/icons-material';
 
-const Users_Groups = () => {
+const Users = () => {
   return (
     <div className='list-container'>
       <div className='ug-header'>
@@ -75,4 +75,4 @@ const Users_Groups = () => {
   );
 };
 
-export default Users_Groups;
+export default Users;

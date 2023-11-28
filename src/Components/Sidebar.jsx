@@ -7,24 +7,45 @@ import NightlightIcon from '@mui/icons-material/Nightlight';
 import { AccountCircle } from '@mui/icons-material';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import './myStyles.css';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Sidebar = ({ conversations }) => {
+const Sidebar = () => {
+  const [conversations] = useState([
+    {
+      name: 'Shree',
+      lastMessage: 'Hello',
+      timeStamp: 'Today',
+    },
+    {
+      name: 'Vishal',
+      lastMessage: 'Good Morning',
+      timeStamp: 'Today',
+    },
+    {
+      name: 'Bhavin',
+      lastMessage: 'Nice to meet you',
+      timeStamp: 'Yesterday',
+    },
+  ]);
+
+  const navigate = useNavigate();
   return (
     <div className='sidebar-container'>
       <div className='sb-header'>
         <div>
-          <IconButton>
+          <IconButton onClick={() => navigate('welcome')}>
             <AccountCircle />
           </IconButton>
         </div>
         <div>
-          <IconButton>
+          <IconButton onClick={() => navigate('users')}>
             <PersonAddIcon />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={() => navigate('groups')}>
             <GroupAddIcon />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={() => navigate('create-group')}>
             <AddCircleIcon />
           </IconButton>
           <IconButton>
