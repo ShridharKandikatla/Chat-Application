@@ -1,3 +1,28 @@
+.dark {
+  background-color: #444444 !important;
+  color: #ededed !important;
+}
+
+.icon {
+  width: 1.2em !important;
+  height: 1.2em !important;
+}
+
+.red {
+  background-color: #333131 !important;
+  color: #ededed !important;
+}
+
+.violet {
+  background-color: #7963d7 !important;
+  color: #ededed !important;
+}
+
+.green {
+  background-color: #71d763 !important;
+  color: #ededed !important;
+}
+
 .MainContainer {
   background-color: #f4f5f8;
   height: 90vh;
@@ -318,6 +343,7 @@
 }
 
 .ug-list {
+  border-radius: 20px;
   flex: 1;
   overflow: scroll;
   scrollbar-width: none;
