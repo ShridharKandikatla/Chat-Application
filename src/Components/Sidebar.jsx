@@ -31,7 +31,6 @@ const Sidebar = () => {
     },
   ]);
 
-  // const [lightTheme, setLightTheme] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const lightTheme = useSelector((state) => state.themeKey);
