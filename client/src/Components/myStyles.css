@@ -378,10 +378,20 @@
     height: 100vh;
     width: 100vw;
   }
-  .list-container{
+  .list-container {
     flex: 1;
   }
-  .welcome-container{
+  .welcome-container {
     flex: 1;
   }
+  .image-container {
+    display: none;
+  }
+  .login-box {
+    flex: 1;
+  }
+}
+
+.hyper {
+  color: purple;
 }

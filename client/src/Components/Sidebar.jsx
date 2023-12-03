@@ -5,7 +5,7 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import NightlightIcon from '@mui/icons-material/Nightlight';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import { AccountCircle, LightMode } from '@mui/icons-material';
+import { AccountCircle, ExitToApp, LightMode } from '@mui/icons-material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './myStyles.css';
@@ -62,6 +62,14 @@ const Sidebar = () => {
                 className={'icon' + (lightTheme ? ' dark' : '')}
               />
             )}
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              localStorage.removeItem('userData');
+              navigate('/');
+            }}
+          >
+            <ExitToApp className={'icon' + (lightTheme ? ' dark' : '')} />
           </IconButton>
         </div>
       </div>

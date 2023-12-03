@@ -1,13 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './myStyles.css';
 import logo from '../Images/live-chat.png';
 import { IconButton } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Users = () => {
+  const [users, setUsers] = useState([]);
   const lightTheme = useSelector((state) => state.themeKey);
+  const userData = JSON.parse(localStorage.getItem('userData'));
+  const navigate = useNavigate();
+  if (!userData) {
+    console.log('no user');
+    navigate(-1);
+  }
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userData.data.token}`,
+      },
+    };
+    // console.log(userData);
+    axios
+      .get('http://localhost:5000/user/fetchUsers', config)
+      .then((response) => {
+        setUsers(response.data);
+      });
+  }, []);
+
   return (
     <AnimatePresence>
       <motion.div
@@ -38,56 +62,22 @@ const Users = () => {
           />
         </div>
         <div className={'ug-list' + (lightTheme ? ' dark' : '')}>
-          <motion.div
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            className={'list-tem' + (lightTheme ? ' dark' : '')}
-          >
-            <p className='con-icon'>T</p>
-            <p className={'con-title' + (lightTheme ? ' dark' : '')}>
-              Test User
-            </p>
-          </motion.div>
-          <motion.div
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            className={'list-tem' + (lightTheme ? ' dark' : '')}
-          >
-            <p className='con-icon'>T</p>
-            <p className={'con-title' + (lightTheme ? ' dark' : '')}>
-              Test User
-            </p>
-          </motion.div>
-          <motion.div
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            className={'list-tem' + (lightTheme ? ' dark' : '')}
-          >
-            <p className='con-icon'>T</p>
-            <p className={'con-title' + (lightTheme ? ' dark' : '')}>
-              Test User
-            </p>
-          </motion.div>
-          <motion.div
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.95 }}
-            className={'list-tem' + (lightTheme ? ' dark' : '')}
-          >
-            <p className='con-icon'>T</p>
-            <p className={'con-title' + (lightTheme ? ' dark' : '')}>
-              Test User
-            </p>
-          </motion.div>
-          <motion.div
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            className={'list-tem' + (lightTheme ? ' dark' : '')}
-          >
-            <p className='con-icon'>T</p>
-            <p className={'con-title' + (lightTheme ? ' dark' : '')}>
-              Test User
-            </p>
-          </motion.div>
+          {users.map((user) => (
+            <motion.div
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+              className={'list-tem' + (lightTheme ? ' dark' : '')}
+              key={user._id}
+              onClick={() => {
+                console.log('clicked username:' + user.name);
+              }}
+            >
+              <p className='con-icon'>{user.name[0]}</p>
+              <p className={'con-title' + (lightTheme ? ' dark' : '')}>
+                {user.name}
+              </p>
+            </motion.div>
+          ))}
         </div>
       </motion.div>
     </AnimatePresence>
