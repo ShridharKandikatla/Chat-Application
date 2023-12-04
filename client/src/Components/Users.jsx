@@ -83,7 +83,15 @@ const Users = () => {
               className={'list-tem' + (lightTheme ? ' dark' : '')}
               key={user._id}
               onClick={() => {
-                console.log('clicked username:' + user.name);
+                const config = {
+                  headers: {
+                    Authorization: `Bearer ${userData.data.token}`,
+                  },
+                };
+                axios.post('http://localhost:5000/chat/', config, {
+                  userId: user._id,
+                });
+
               }}
             >
               <p className='con-icon'>{user.name[0]}</p>
