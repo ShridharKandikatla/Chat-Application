@@ -32,6 +32,17 @@ const Users = () => {
       });
   }, []);
 
+  // const handleSearch = (value) => {
+  //   const usersCopy = [...users];
+  //   if (value === '') {
+  //     setUsers(usersCopy);
+  //   }
+  //   const filteredUsers = usersCopy.filter((user) => {
+  //     return user.name.toLowerCase().includes(value.toLowerCase());
+  //   });
+  //   setUsers(filteredUsers);
+  // };
+
   return (
     <AnimatePresence>
       <motion.div
@@ -59,6 +70,9 @@ const Users = () => {
             type='text'
             placeholder='Search Users'
             className={'search-box' + (lightTheme ? ' dark' : '')}
+            // onChange={(e) => {
+            //   handleSearch(e.target.value);
+            // }}
           />
         </div>
         <div className={'ug-list' + (lightTheme ? ' dark' : '')}>

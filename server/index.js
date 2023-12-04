@@ -2,12 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const userRoutes = require('./Routes/userRoutes');
+const chatRoutes = require('./Routes/chatRoutes');
 const { default: mongoose } = require('mongoose');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use('/user', userRoutes);
+app.use('/chat', chatRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI)
