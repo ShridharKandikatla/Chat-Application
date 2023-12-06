@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './myStyles.css';
 import logo from '../Images/live-chat.png';
 import { IconButton } from '@mui/material';
-import { Search } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
+import { Refresh, Search } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { refreshSidebarFun } from '../Features/refreshSidebar';
+import { myContext } from './MainContainer';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const { refresh, setRefresh } = useContext(myContext);
   const lightTheme = useSelector((state) => state.themeKey);
   const userData = JSON.parse(localStorage.getItem('userData'));
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   if (!userData) {
     console.log('no user');
     navigate(-1);
@@ -24,24 +29,23 @@ const Users = () => {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
-    // console.log(userData);
     axios
       .get('http://localhost:5000/user/fetchUsers', config)
       .then((response) => {
         setUsers(response.data);
       });
-  }, []);
+  }, [refresh]);
 
-  // const handleSearch = (value) => {
-  //   const usersCopy = [...users];
-  //   if (value === '') {
-  //     setUsers(usersCopy);
-  //   }
-  //   const filteredUsers = usersCopy.filter((user) => {
-  //     return user.name.toLowerCase().includes(value.toLowerCase());
-  //   });
-  //   setUsers(filteredUsers);
-  // };
+  const handleSearch = (value) => {
+    const usersCopy = [...users];
+    if (value === '') {
+      setUsers(usersCopy);
+    }
+    const filteredUsers = usersCopy.filter((user) => {
+      return user.name.toLowerCase().includes(value.toLowerCase());
+    });
+    setUsers(filteredUsers);
+  };
 
   return (
     <AnimatePresence>
@@ -61,6 +65,14 @@ const Users = () => {
           <p className={'ug-title' + (lightTheme ? ' dark' : '')}>
             Available Users
           </p>
+          <IconButton
+            className={'icon' + (lightTheme ? ' dark' : '')}
+            onClick={() => {
+              setRefresh(!refresh);
+            }}
+          >
+            <Refresh />
+          </IconButton>
         </div>
         <div className={'sb-search' + (lightTheme ? ' dark' : '')}>
           <IconButton>
@@ -70,31 +82,43 @@ const Users = () => {
             type='text'
             placeholder='Search Users'
             className={'search-box' + (lightTheme ? ' dark' : '')}
-            // onChange={(e) => {
-            //   handleSearch(e.target.value);
-            // }}
+            onChange={(e) => {
+              handleSearch(e.target.value);
+            }}
           />
         </div>
         <div className={'ug-list' + (lightTheme ? ' dark' : '')}>
-          {users.map((user) => (
+          {users.map((user, index) => (
             <motion.div
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
               className={'list-tem' + (lightTheme ? ' dark' : '')}
-              key={user._id}
+              key={index}
               onClick={() => {
                 const config = {
                   headers: {
                     Authorization: `Bearer ${userData.data.token}`,
                   },
                 };
-                axios.post('http://localhost:5000/chat/', config, {
-                  userId: user._id,
-                });
-
+                axios
+                  .post(
+                    'http://localhost:5000/chat/access',
+                    {
+                      userId: user._id,
+                    },
+                    config
+                  )
+                  .then(() => {
+                    navigate(`/app/chat/${user._id}&${user.name}`);
+                    setRefresh(!refresh);
+                    dispatch(refreshSidebarFun());
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
               }}
             >
-              <p className='con-icon'>{user.name[0]}</p>
+              <p className='con-icon'>{user.name[0].toUpperCase()}</p>
               <p className={'con-title' + (lightTheme ? ' dark' : '')}>
                 {user.name}
               </p>

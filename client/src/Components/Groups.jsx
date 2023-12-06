@@ -1,13 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './myStyles.css';
 import logo from '../Images/live-chat.png';
 import { IconButton } from '@mui/material';
-import { Search } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
+import { Refresh, Search } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { refreshSidebarFun } from '../Features/refreshSidebar';
+import axios from 'axios';
 
 const Groups = () => {
+  const [groups, setGroups] = useState([]);
+  const [refresh, setRefresh] = useState(true);
   const lightTheme = useSelector((state) => state.themeKey);
+  const userData = JSON.parse(localStorage.getItem('userData'));
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  if (!userData) {
+    console.log('no user');
+    navigate('/login');
+  }
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userData.data.token}`,
+      },
+    };
+    axios
+      .get('http://localhost:5000/chat/fetchGroups', config)
+      .then((response) => {
+        setGroups(response.data);
+      });
+  }, [refresh]);
+
   return (
     <AnimatePresence>
       <motion.div
@@ -26,6 +52,14 @@ const Groups = () => {
           <p className={'ug-title' + (lightTheme ? ' dark' : '')}>
             Available Groups
           </p>
+          <IconButton
+            className={'icon' + (lightTheme ? ' dark' : '')}
+            onClick={() => {
+              setRefresh(!refresh);
+            }}
+          >
+            <Refresh />
+          </IconButton>
         </div>
         <div className={'sb-search' + (lightTheme ? ' dark' : '')}>
           <IconButton>
@@ -38,56 +72,38 @@ const Groups = () => {
           />
         </div>
         <div className={'ug-list' + (lightTheme ? ' dark' : '')}>
-          <motion.div
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            className={'list-tem' + (lightTheme ? ' dark' : '')}
-          >
-            <p className='con-icon'>T</p>
-            <p className={'con-title' + (lightTheme ? ' dark' : '')}>
-              Test Group
-            </p>
-          </motion.div>
-          <motion.div
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            className={'list-tem' + (lightTheme ? ' dark' : '')}
-          >
-            <p className='con-icon'>T</p>
-            <p className={'con-title' + (lightTheme ? ' dark' : '')}>
-              Test Group
-            </p>
-          </motion.div>
-          <motion.div
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            className={'list-tem' + (lightTheme ? ' dark' : '')}
-          >
-            <p className='con-icon'>T</p>
-            <p className={'con-title' + (lightTheme ? ' dark' : '')}>
-              Test Group
-            </p>
-          </motion.div>
-          <motion.div
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.95 }}
-            className={'list-tem' + (lightTheme ? ' dark' : '')}
-          >
-            <p className='con-icon'>T</p>
-            <p className={'con-title' + (lightTheme ? ' dark' : '')}>
-              Test Group
-            </p>
-          </motion.div>
-          <motion.div
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            className={'list-tem' + (lightTheme ? ' dark' : '')}
-          >
-            <p className='con-icon'>T</p>
-            <p className={'con-title' + (lightTheme ? ' dark' : '')}>
-              Test Group
-            </p>
-          </motion.div>
+          {groups.map((group, index) => (
+            <motion.div
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+              className={'list-tem' + (lightTheme ? ' dark' : '')}
+              key={index}
+              onClick={() => {
+                const config = {
+                  headers: {
+                    Authorization: `Bearer ${userData.data.token}`,
+                  },
+                };
+                axios
+                  .put(
+                    'http://localhost:5000/chat/addSelfToGroup',
+                    {
+                      chatId: group._id,
+                      userId: userData.data._id,
+                    },
+                    config
+                  )
+                  .then(() => {
+                    dispatch(refreshSidebarFun());
+                  });
+              }}
+            >
+              <p className='con-icon'>{group.chatName[0].toUpperCase()}</p>
+              <p className={'con-title' + (lightTheme ? ' dark' : '')}>
+                {group.chatName}
+              </p>
+            </motion.div>
+          ))}
         </div>
       </motion.div>
     </AnimatePresence>

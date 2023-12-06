@@ -7,8 +7,9 @@ import ChatArea from './Components/ChatArea';
 import Users from './Components/Users';
 import CreateGroup from './Components/CreateGroup';
 import Groups from './Components/Groups';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 function App() {
+  const dispatch = useDispatch();
   const lightTheme = useSelector((state) => state.themeKey);
   return (
     <>
@@ -17,7 +18,7 @@ function App() {
           <Route path='/' element={<Login />} />
           <Route path='app' element={<MainContainer />}>
             <Route path='welcome' element={<Welcome />} />
-            <Route path='chat' element={<ChatArea />} />
+            <Route path='chat/:_id' element={<ChatArea />} />
             <Route path='users' element={<Users />} />
             <Route path='groups' element={<Groups />} />
             <Route path='create-group' element={<CreateGroup />} />

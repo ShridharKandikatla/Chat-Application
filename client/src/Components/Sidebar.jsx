@@ -6,34 +6,37 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import NightlightIcon from '@mui/icons-material/Nightlight';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import { AccountCircle, ExitToApp, LightMode } from '@mui/icons-material';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './myStyles.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../Features/ThemeSlice';
+import { myContext } from './MainContainer';
+import axios from 'axios';
+import './myStyles.css';
 
 const Sidebar = () => {
-  const [conversations] = useState([
-    {
-      name: 'Shree',
-      lastMessage: 'Hello',
-      timeStamp: 'Today',
-    },
-    {
-      name: 'Vishal',
-      lastMessage: 'Good Morning',
-      timeStamp: 'Today',
-    },
-    {
-      name: 'Bhavin',
-      lastMessage: 'Nice to meet you',
-      timeStamp: 'Yesterday',
-    },
-  ]);
-
+  const [conversations, setConversation] = useState([]);
+  const { refresh, setRefresh } = useContext(myContext);
+  const lightTheme = useSelector((state) => state.themeKey);
+  const userData = JSON.parse(localStorage.getItem('userData'));
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const lightTheme = useSelector((state) => state.themeKey);
+
+  if (!userData) {
+    console.log('no user');
+    navigate('/');
+  }
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userData.data.token}`,
+      },
+    };
+    axios.get('http://localhost:5000/chat/', config).then((response) => {
+      setConversation(response.data);
+    });
+  });
 
   return (
     <div className='sidebar-container'>
@@ -85,7 +88,67 @@ const Sidebar = () => {
       </div>
       <div className={'sb-conversations' + (lightTheme ? ' dark' : '')}>
         {conversations.map((conversation, index) => {
-          return <ConversationItem key={index} props={conversation} />;
+          var chatname = '';
+          if (conversation.isGroupChat) {
+            chatname = conversation.chatName;
+          } else {
+            conversation.users.map((user) => {
+              if (user._id != userData.data._id) {
+                chatname = user.name;
+              }
+            });
+          }
+          if (conversation.latestMessage === undefined) {
+            return (
+              <div
+                key={index}
+                onClick={() => {
+                  setRefresh(!refresh);
+                }}
+              >
+                <div
+                  key={index}
+                  className='conversation-container'
+                  onClick={() => {
+                    navigate('chat/' + conversation._id + '&' + chatname);
+                  }}
+                  // dispatch change to refresh so as to update chatArea
+                >
+                  <p className={'con-icon' + (lightTheme ? ' dark' : '')}>
+                    {chatname[0]}
+                  </p>
+                  <p className={'con-title' + (lightTheme ? ' dark' : '')}>
+                    {chatname}
+                  </p>
+                  <p
+                    className={'con-lastMessage' + (lightTheme ? ' dark' : '')}
+                  >
+                    No previous Messages, click here to start a new chat
+                  </p>
+                </div>
+              </div>
+            );
+          } else {
+            return (
+              <div
+                key={index}
+                className='conversation-container'
+                onClick={() => {
+                  navigate('chat/' + conversation._id + '&' + chatname);
+                }}
+              >
+                <p className={'con-icon' + (lightTheme ? ' dark' : '')}>
+                  {chatname[0].toUpperCase()}
+                </p>
+                <p className={'con-title' + (lightTheme ? ' dark' : '')}>
+                  {chatname}
+                </p>
+                <p className={'con-lastMessage' + (lightTheme ? ' dark' : '')}>
+                  {conversation.latestMessage.content}
+                </p>
+              </div>
+            );
+          }
         })}
       </div>
     </div>

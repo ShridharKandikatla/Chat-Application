@@ -1,12 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './mystyles.css';
 import { IconButton } from '@mui/material';
 import { DoneOutlineRounded } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const CreateGroup = () => {
+  const [groupName, setGroupName] = useState('');
   const lightTheme = useSelector((state) => state.themeKey);
+  const userData = JSON.parse(localStorage.getItem('userData'));
+  const navigate = useNavigate();
+  if (!userData) {
+    console.log('no user');
+    navigate('/login');
+  }
+  const makeGroup = () => {
+    const config = {
+      headers: {
+        Authorization: 'Bearer ' + userData.data.token,
+      },
+    };
+    const response = axios
+      .post(
+        'http://localhost:5000/chat/createGroup',
+        { name: groupName, users: `[]` },
+        config
+      )
+      .then(() => {
+        setGroupName('');
+        navigate('/app/groups');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <AnimatePresence>
       <motion.div
@@ -20,8 +50,9 @@ const CreateGroup = () => {
           type='text'
           placeholder='Enter Group Name'
           className={'search-box' + (lightTheme ? ' dark' : '')}
+          onChange={(e) => setGroupName(e.target.value)}
         />
-        <IconButton>
+        <IconButton onClick={makeGroup}>
           <DoneOutlineRounded
             className={'icon' + (lightTheme ? ' dark' : '')}
           />

@@ -4,6 +4,7 @@ const Chat = require('../Models/chatModel');
 
 const accessChat = asyncHandler(async (req, res) => {
   const { userId } = req.body;
+  console.log(req.body);
   if (!userId) {
     console.log('UserId param not sent with request');
     return res.sendStatus(400);
@@ -125,7 +126,6 @@ const groupExit = asyncHandler(async (req, res) => {
 
 const addSelfToGroup = asyncHandler(async (req, res) => {
   const { chatId, userId } = req.body;
-
   const added = await Chat.findByIdAndUpdate(
     chatId,
     {
@@ -142,7 +142,7 @@ const addSelfToGroup = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Chat not found');
   }
-  res.status(200).send(added);
+  res.status(200).json(added);
 });
 
 module.exports = {

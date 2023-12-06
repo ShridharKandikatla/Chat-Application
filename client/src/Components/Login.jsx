@@ -7,7 +7,7 @@ import axios from 'axios';
 import Toaster from './Toaster';
 
 const Login = () => {
-  const [showLogin, setShowLogin] = useState(false);
+  const [showLogin, setShowLogin] = useState(true);
   const [data, setData] = useState({
     name: '',
     email: '',
@@ -102,7 +102,7 @@ const Login = () => {
               id='standard-basic'
               label='Enter Username'
               name='name'
-              value={data.name}
+              // value={data.name}
               variant='outlined'
               onChange={(e) => changeHandler(e)}
             />
