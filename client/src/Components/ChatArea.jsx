@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Send } from '@mui/icons-material';
 import MessageOthers from './MessageOthers';
 import MessageSelf from './MessageSelf';
-import '../CSS/mystyles.css';
+//import '../CSS/mystyles.css';
 import { useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
 import axios from 'axios';

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import '../CSS/mystyles.css';
+//import '../CSS/mystyles.css';
 import { useSelector } from 'react-redux';
 const ConversationItem = ({ props }) => {
   const navigate = useNavigate();
