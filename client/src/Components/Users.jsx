@@ -107,6 +107,7 @@ const Users = () => {
                   )
                   .then(() => {
                     setRefresh(!refresh);
+                    navigate(`/app/chat/${user._id}&${user.name}`);
                   })
                   .catch((err) => {
                     console.log(err);

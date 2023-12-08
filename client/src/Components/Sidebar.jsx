@@ -36,7 +36,6 @@ const Sidebar = () => {
       .then((response) => {
         setConversation(response.data);
       });
-    console.log(refresh);
   }, [refresh]);
 
   return (
