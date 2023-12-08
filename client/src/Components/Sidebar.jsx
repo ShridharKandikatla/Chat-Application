@@ -33,9 +33,14 @@ const Sidebar = () => {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
-    axios.get('http://localhost:5000/chat/', config).then((response) => {
-      setConversation(response.data);
-    });
+    axios
+      .get(
+        'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/chat/',
+        config
+      )
+      .then((response) => {
+        setConversation(response.data);
+      });
     console.log(refresh);
   }, [refresh]);
 

@@ -29,7 +29,10 @@ const Users = () => {
       },
     };
     axios
-      .get('http://localhost:5000/user/fetchUsers', config)
+      .get(
+        'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/user/fetchUsers',
+        config
+      )
       .then((response) => {
         setUsers(response.data);
       });
@@ -101,7 +104,7 @@ const Users = () => {
                 };
                 axios
                   .post(
-                    'http://localhost:5000/chat/access',
+                    'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/chat/access',
                     {
                       userId: user._id,
                     },

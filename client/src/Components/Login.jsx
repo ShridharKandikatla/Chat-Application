@@ -34,7 +34,7 @@ const Login = () => {
       };
 
       const response = await axios.post(
-        'http://localhost:5000/user/register',
+        'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/user/register',
         data,
         config
       );
@@ -67,7 +67,7 @@ const Login = () => {
         },
       };
       const response = await axios.post(
-        'http://localhost:5000/user/login',
+        'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/user/login',
         data,
         config
       );

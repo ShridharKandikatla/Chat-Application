@@ -24,7 +24,7 @@ const CreateGroup = () => {
     };
     axios
       .post(
-        'http://localhost:5000/chat/createGroup',
+        'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/chat/createGroup',
         { name: groupName, users: `[]` },
         config
       )

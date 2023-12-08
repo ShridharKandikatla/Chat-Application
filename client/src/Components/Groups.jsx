@@ -28,7 +28,10 @@ const Groups = () => {
       },
     };
     axios
-      .get('http://localhost:5000/chat/fetchGroups', config)
+      .get(
+        'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/chat/fetchGroups',
+        config
+      )
       .then((response) => {
         setGroups(response.data);
       });
@@ -86,7 +89,7 @@ const Groups = () => {
                 };
                 axios
                   .put(
-                    'http://localhost:5000/chat/addSelfToGroup',
+                    'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/chat/addSelfToGroup',
                     {
                       chatId: group._id,
                       userId: userData.data._id,
