@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({
   origin:["https://chat-application-unpr.onrender.com",
-          "https://chat-application-v61q.vercel.app/"],
+          "https://chat-application-v61q.vercel.app"],
   credentials:true
 }));
 app.use('/user', userRoutes);
