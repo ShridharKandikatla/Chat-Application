@@ -36,7 +36,8 @@ const Sidebar = () => {
     axios.get('http://localhost:5000/chat/', config).then((response) => {
       setConversation(response.data);
     });
-  });
+    console.log(refresh);
+  }, [refresh]);
 
   return (
     <div className='sidebar-container'>
@@ -103,7 +104,7 @@ const Sidebar = () => {
               <div
                 key={index}
                 onClick={() => {
-                  setRefresh(!refresh);
+                  setRefresh(true);
                 }}
               >
                 <div
@@ -138,7 +139,7 @@ const Sidebar = () => {
                 }}
               >
                 <p className={'con-icon' + (lightTheme ? ' dark' : '')}>
-                  {chatname[0].toUpperCase()}
+                  {chatname[0]}
                 </p>
                 <p className={'con-title' + (lightTheme ? ' dark' : '')}>
                   {chatname}

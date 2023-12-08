@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './myStyles.css';
 import logo from '../Images/live-chat.png';
 import { IconButton } from '@mui/material';
@@ -6,12 +6,12 @@ import { Refresh, Search } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { refreshSidebarFun } from '../Features/refreshSidebar';
 import axios from 'axios';
+import { myContext } from './MainContainer';
 
 const Groups = () => {
   const [groups, setGroups] = useState([]);
-  const [refresh, setRefresh] = useState(true);
+  const { refresh, setRefresh } = useContext(myContext);
   const lightTheme = useSelector((state) => state.themeKey);
   const userData = JSON.parse(localStorage.getItem('userData'));
   const navigate = useNavigate();
@@ -94,7 +94,8 @@ const Groups = () => {
                     config
                   )
                   .then(() => {
-                    dispatch(refreshSidebarFun());
+                    setRefresh(!refresh);
+                    navigate(`/app/chat/${group._id}&${group.chatName}`);
                   });
               }}
             >

@@ -22,11 +22,34 @@ mongoose
     console.log(err.message);
   });
 
-app.get('/', (req, res) => {
-  console.log('Hello World');
-  res.send('Hello World');
+server = app.listen(process.env.PORT || 5000, () => {
+  console.log('Server started on port 5000');
 });
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log('Server started on port 5000');
+const io = require('socket.io')(server, {
+  cors: {
+    origin: '*',
+    credentials: true,
+  },
+  pingTimeout: 60000,
+});
+
+io.on('connection', (socket) => {
+  socket.on('setup', (user) => {
+    socket.join(user.data._id);
+    socket.emit('connected');
+  });
+
+  socket.on('join chat', (room) => {
+    socket.join(room);
+  });
+
+  socket.on('new message', (newMessageStatus) => {
+    if (!newMessageStatus.chat.users)
+      return console.log('chat.users not defined');
+    newMessageStatus.chat.users.forEach((user) => {
+      if (user._id == newMessageStatus.sender._id) return;
+      socket.in(user._id).emit('message recieved', newMessageStatus);
+    });
+  });
 });

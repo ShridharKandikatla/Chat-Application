@@ -22,7 +22,7 @@ const CreateGroup = () => {
         Authorization: 'Bearer ' + userData.data.token,
       },
     };
-    const response = axios
+    axios
       .post(
         'http://localhost:5000/chat/createGroup',
         { name: groupName, users: `[]` },

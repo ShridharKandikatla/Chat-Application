@@ -5,24 +5,26 @@ import { Send } from '@mui/icons-material';
 import MessageOthers from './MessageOthers';
 import MessageSelf from './MessageSelf';
 import './myStyles.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { myContext } from './MainContainer';
+import { io } from 'socket.io-client';
 
+var socket;
 const ChatArea = () => {
   const { refresh, setRefresh } = useContext(myContext);
   const [loaded, setloaded] = useState(false);
   const [messageContent, setMessageContent] = useState('');
-  // const messagesEndRef = useRef(null);
+  const [socketConnectionStatus, setSocketConnectionStatus] = useState(false);
   const dyParams = useParams();
   const [chat_id, chat_user] = dyParams._id.split('&');
   const [allMessages, setAllMessages] = useState([]);
   const [allMessagesCopy, setAllMessagesCopy] = useState([]);
   const lightTheme = useSelector((state) => state.themeKey);
   const userData = JSON.parse(localStorage.getItem('userData'));
-  // const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
   const sendMessage = () => {
@@ -40,10 +42,19 @@ const ChatArea = () => {
         },
         config
       )
-      .then(() => {
+      .then(({ data }) => {
+        socket.emit('new message', data);
         setRefresh(!refresh);
       });
   };
+
+  useEffect(() => {
+    socket = io('http://localhost:5000');
+    socket.emit('setup', userData);
+    socket.on('connected', () => {
+      setSocketConnectionStatus(!socketConnectionStatus);
+    });
+  }, []);
 
   useEffect(() => {
     const config = {
@@ -56,9 +67,20 @@ const ChatArea = () => {
       .then(({ data }) => {
         setAllMessages(data);
         setloaded(true);
+        socket.emit('join chat', chat_id);
       });
     setAllMessagesCopy(allMessages);
   }, [refresh, chat_id, userData.data.token, allMessages]);
+
+  useEffect(() => {
+    socket.on('message received', (newMessage) => {
+      if (!allMessagesCopy || allMessagesCopy._id != newMessage._id) {
+        // setAllMessages([...allMessages, newMessage]);
+      } else {
+        setAllMessagesCopy([...allMessages, newMessage]);
+      }
+    });
+  });
 
   if (!loaded) {
     return (
@@ -129,8 +151,8 @@ const ChatArea = () => {
                     config
                   )
                   .then(() => {
-                    navigate('/app/welcome');
                     setRefresh(!refresh);
+                    navigate('/app/welcome');
                   });
               }}
             >
