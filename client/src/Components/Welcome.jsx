@@ -1,7 +1,6 @@
 import React from 'react';
 import logo from '../Images/live-chat.png';
 import { useSelector } from 'react-redux';
-//import '../CSS/mystyles.css';
 
 const Welcome = () => {
   const lightTheme = useSelector((state) => state.themeKey);

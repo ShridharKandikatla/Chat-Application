@@ -114,7 +114,15 @@ const Login = () => {
               autoComplete='current-password'
               onChange={(e) => changeHandler(e)}
             />
-            <Button variant='outlined' onClick={() => loginHandler()}>
+            <Button
+              variant='outlined'
+              onKeyDown={(event) => {
+                if (event.code == 'Enter') {
+                  loginHandler();
+                }
+              }}
+              onClick={() => loginHandler()}
+            >
               Login
             </Button>
             <p>
@@ -153,7 +161,15 @@ const Login = () => {
               name='password'
               onChange={(e) => changeHandler(e)}
             />
-            <Button variant='outlined' onClick={() => signupHandler()}>
+            <Button
+              variant='outlined'
+              onKeyDown={(event) => {
+                if (event.code == 'Enter') {
+                  signupHandler();
+                }
+              }}
+              onClick={() => signupHandler()}
+            >
               Create Account
             </Button>
             <p>

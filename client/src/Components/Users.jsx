@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-//import '../CSS/mystyles.css';
 import logo from '../Images/live-chat.png';
 import { IconButton } from '@mui/material';
 import { Refresh, Search } from '@mui/icons-material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -15,7 +14,6 @@ const Users = () => {
   const lightTheme = useSelector((state) => state.themeKey);
   const userData = JSON.parse(localStorage.getItem('userData'));
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   if (!userData) {
     console.log('no user');

@@ -59,6 +59,17 @@
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
+.sb-chatlistsearch {
+  background-color: white;
+  border-radius: 20px;
+  padding: 5px 10px;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
 .search-box {
   outline-width: 0;
   border: none;
@@ -76,6 +87,10 @@
   overflow: scroll;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.sb-chatlist-container {
+  display: none;
 }
 
 .sb-conversations::-webkit-scrollbar {
@@ -354,6 +369,10 @@
   display: none;
 }
 
+.chat-icon {
+  display: none;
+}
+
 /* Mobile View */
 @media only screen and (max-width: 40em) {
   .sb-search {
@@ -389,6 +408,12 @@
   }
   .login-box {
     flex: 1;
+  }
+  .chat-icon {
+    display: block;
+  }
+  .sb-chatlist-container {
+    display: block;
   }
 }
 

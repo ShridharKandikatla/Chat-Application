@@ -1,24 +1,17 @@
-import IconButton from '@mui/material/IconButton';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import NightlightIcon from '@mui/icons-material/Nightlight';
-import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import { AccountCircle, Chat, ExitToApp, LightMode } from '@mui/icons-material';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleTheme } from '../Features/ThemeSlice';
+import { useSelector } from 'react-redux';
+import IconButton from '@mui/material/IconButton';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import { myContext } from './MainContainer';
 import axios from 'axios';
 
-const Sidebar = () => {
+const ChatList = () => {
   const [conversations, setConversation] = useState([]);
   const { refresh, setRefresh } = useContext(myContext);
   const lightTheme = useSelector((state) => state.themeKey);
   const userData = JSON.parse(localStorage.getItem('userData'));
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   if (!userData) {
     console.log('no user');
@@ -38,51 +31,9 @@ const Sidebar = () => {
       });
     console.log(refresh);
   }, [refresh]);
-
   return (
-    <div className='sidebar-container'>
-      <div className={'sb-header' + (lightTheme ? ' dark' : '')}>
-        <div>
-          <IconButton onClick={() => navigate('welcome')}>
-            <AccountCircle className={'icon' + (lightTheme ? ' dark' : '')} />
-          </IconButton>
-        </div>
-        <div className='chat-icon'>
-          <IconButton onClick={() => navigate('chatlist')}>
-            <Chat className={'icon' + (lightTheme ? ' dark' : '')} />
-          </IconButton>
-        </div>
-        <div>
-          <IconButton onClick={() => navigate('users')}>
-            <PersonAddIcon className={'icon' + (lightTheme ? ' dark' : '')} />
-          </IconButton>
-          <IconButton onClick={() => navigate('groups')}>
-            <GroupAddIcon className={'icon' + (lightTheme ? ' dark' : '')} />
-          </IconButton>
-          <IconButton onClick={() => navigate('create-group')}>
-            <AddCircleIcon className={'icon' + (lightTheme ? ' dark' : '')} />
-          </IconButton>
-          <IconButton onClick={() => dispatch(toggleTheme())}>
-            {lightTheme && (
-              <LightMode className={'icon' + (lightTheme ? ' dark' : '')} />
-            )}
-            {!lightTheme && (
-              <NightlightIcon
-                className={'icon' + (lightTheme ? ' dark' : '')}
-              />
-            )}
-          </IconButton>
-          <IconButton
-            onClick={() => {
-              localStorage.removeItem('userData');
-              navigate('/');
-            }}
-          >
-            <ExitToApp className={'icon' + (lightTheme ? ' dark' : '')} />
-          </IconButton>
-        </div>
-      </div>
-      <div className={'sb-search' + (lightTheme ? ' dark' : '')}>
+    <div className='sb-chatlist-container'>
+      <div className={'sb-chatlistsearch' + (lightTheme ? ' dark' : '')}>
         <IconButton>
           <PersonSearchIcon className={'icon' + (lightTheme ? ' dark' : '')} />
         </IconButton>
@@ -92,7 +43,7 @@ const Sidebar = () => {
           className={'search-box' + (lightTheme ? ' dark' : '')}
         />
       </div>
-      <div className={'sb-conversations' + (lightTheme ? ' dark' : '')}>
+      <div className={'sb-chatlist' + (lightTheme ? ' dark' : '')}>
         {conversations.map((conversation, index) => {
           var chatname = '';
           if (conversation.isGroupChat) {
@@ -161,4 +112,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default ChatList;

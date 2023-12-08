@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-//import '../CSS/mystyles.css';
 import { IconButton } from '@mui/material';
 import { DoneOutlineRounded } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
@@ -52,7 +51,14 @@ const CreateGroup = () => {
           className={'search-box' + (lightTheme ? ' dark' : '')}
           onChange={(e) => setGroupName(e.target.value)}
         />
-        <IconButton onClick={makeGroup}>
+        <IconButton
+          onKeyDown={(event) => {
+            if (event.code == 'Enter') {
+              makeGroup();
+            }
+          }}
+          onClick={makeGroup}
+        >
           <DoneOutlineRounded
             className={'icon' + (lightTheme ? ' dark' : '')}
           />

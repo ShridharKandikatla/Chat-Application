@@ -10,7 +10,6 @@ const MessageOthers = ({ props }) => {
         <div className={'other-text-content' + (lightTheme ? ' green' : '')}>
           <p className='con-title'>{props.sender.name}</p>
           <p className='con-lastMessage'>{props.content}</p>
-          {/* <p className='self-timestamp'>{props1.timestamp}</p> */}
         </div>
       </div>
     </div>
