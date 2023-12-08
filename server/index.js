@@ -8,7 +8,10 @@ const { default: mongoose } = require('mongoose');
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin:["https://chat-application-unpr.onrender.com"],
+  credentials:true
+}));
 app.use('/user', userRoutes);
 app.use('/chat', chatRoutes);
 app.use('/message', messageRoutes);
