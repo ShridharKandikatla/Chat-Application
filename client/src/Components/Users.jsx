@@ -29,10 +29,7 @@ const Users = () => {
       },
     };
     axios
-      .get(
-        'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/user/fetchUsers',
-        config
-      )
+      .get('https://live-chat-server-2nte.onrender.com/user/fetchUsers', config)
       .then((response) => {
         setUsers(response.data);
       });
@@ -104,7 +101,7 @@ const Users = () => {
                 };
                 axios
                   .post(
-                    'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/chat/access',
+                    'https://live-chat-server-2nte.onrender.com/chat/access',
                     {
                       userId: user._id,
                     },

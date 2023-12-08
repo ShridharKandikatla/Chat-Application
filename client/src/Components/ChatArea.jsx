@@ -35,7 +35,7 @@ const ChatArea = () => {
     };
     axios
       .post(
-        'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/on-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/message/',
+        'https://live-chat-server-2nte.onrender.com/on-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/message/',
         {
           content: messageContent,
           chatId: chat_id,
@@ -49,9 +49,7 @@ const ChatArea = () => {
   };
 
   useEffect(() => {
-    socket = io(
-      'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/'
-    );
+    socket = io('https://live-chat-server-2nte.onrender.com/');
     socket.emit('setup', userData);
     socket.on('connected', () => {
       setSocketConnectionStatus(!socketConnectionStatus);
@@ -66,8 +64,7 @@ const ChatArea = () => {
     };
     axios
       .get(
-        'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/message/' +
-          chat_id,
+        'https://live-chat-server-2nte.onrender.com/message/' + chat_id,
         config
       )
       .then(({ data }) => {
@@ -149,7 +146,7 @@ const ChatArea = () => {
                 };
                 axios
                   .put(
-                    'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/chat/groupExit',
+                    'https://live-chat-server-2nte.onrender.com/chat/groupExit',
                     {
                       chatId: chat_id,
                       userId: userData.data._id,

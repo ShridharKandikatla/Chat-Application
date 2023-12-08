@@ -34,7 +34,7 @@ const Login = () => {
       };
 
       const response = await axios.post(
-        'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/user/register',
+        'https://live-chat-server-2nte.onrender.com/user/register',
         data,
         config
       );
@@ -67,7 +67,7 @@ const Login = () => {
         },
       };
       const response = await axios.post(
-        'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/user/login',
+        'https://live-chat-server-2nte.onrender.com/user/login',
         data,
         config
       );

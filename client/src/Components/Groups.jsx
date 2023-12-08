@@ -29,7 +29,7 @@ const Groups = () => {
     };
     axios
       .get(
-        'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/chat/fetchGroups',
+        'https://live-chat-server-2nte.onrender.com/chat/fetchGroups',
         config
       )
       .then((response) => {
@@ -89,7 +89,7 @@ const Groups = () => {
                 };
                 axios
                   .put(
-                    'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/chat/addSelfToGroup',
+                    'https://live-chat-server-2nte.onrender.com/chat/addSelfToGroup',
                     {
                       chatId: group._id,
                       userId: userData.data._id,

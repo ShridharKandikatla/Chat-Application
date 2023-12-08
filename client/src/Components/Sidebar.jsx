@@ -34,10 +34,7 @@ const Sidebar = () => {
       },
     };
     axios
-      .get(
-        'https://chat-application-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/chat/',
-        config
-      )
+      .get('https://live-chat-server-2nte.onrender.com/chat/', config)
       .then((response) => {
         setConversation(response.data);
       });
