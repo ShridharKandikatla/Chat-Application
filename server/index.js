@@ -8,7 +8,11 @@ const { default: mongoose } = require('mongoose');
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin:["https://chat-application-unpr.onrender.com",
+          "https://chat-application-v61q.vercel.app"],
+  credentials:true
+}));
 app.use('/user', userRoutes);
 app.use('/chat', chatRoutes);
 app.use('/message', messageRoutes);
@@ -21,6 +25,10 @@ mongoose
   .catch((err) => {
     console.log(err.message);
   });
+
+app.get('/',(req,res)=>{
+  res.send('hello');
+})
 
 server = app.listen(process.env.PORT || 5000, () => {
   console.log('Server started on port 5000');
