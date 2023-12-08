@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../Features/ThemeSlice';
 import { myContext } from './MainContainer';
 import axios from 'axios';
-import './myStyles.css';
+import '../CSS/mystyles.css';
 
 const Sidebar = () => {
   const [conversations, setConversation] = useState([]);
