@@ -43,6 +43,7 @@ const ChatArea = () => {
       )
       .then(({ data }) => {
         socket.emit('new message', data);
+        setMessageContent('');
         setRefresh(!refresh);
       });
   };
@@ -72,7 +73,7 @@ const ChatArea = () => {
         socket.emit('join chat', chat_id);
       });
     setAllMessagesCopy(allMessages);
-  }, [refresh, chat_id, userData.data.token, allMessages]);
+  }, [refresh, chat_id, userData.data.token]);
 
   useEffect(() => {
     socket.on('message received', (newMessage) => {
@@ -187,8 +188,6 @@ const ChatArea = () => {
               onKeyDown={(event) => {
                 if (event.code == 'Enter') {
                   sendMessage();
-                  setMessageContent('');
-                  setRefresh(!refresh);
                 }
               }}
             />
@@ -196,8 +195,6 @@ const ChatArea = () => {
               className={'icon' + (lightTheme ? ' dark' : '')}
               onClick={() => {
                 sendMessage();
-                setMessageContent('');
-                setRefresh(!refresh);
               }}
             >
               <Send />

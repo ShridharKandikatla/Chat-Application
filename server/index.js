@@ -40,7 +40,10 @@ server = app.listen(process.env.PORT || 5000, () => {
 
 const io = require('socket.io')(server, {
   cors: {
-    origin: '*',
+    origin: [
+      'https://chat-application-unpr.onrender.com',
+      'http://localhost:3000',
+    ],
     credentials: true,
   },
   pingTimeout: 60000,
