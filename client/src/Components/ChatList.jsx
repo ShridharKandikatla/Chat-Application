@@ -29,8 +29,8 @@ const ChatList = () => {
       .then((response) => {
         setConversation(response.data);
       });
-    console.log(refresh);
   }, [refresh]);
+
   return (
     <div className='sb-chatlist-container'>
       <div className={'sb-chatlistsearch' + (lightTheme ? ' dark' : '')}>

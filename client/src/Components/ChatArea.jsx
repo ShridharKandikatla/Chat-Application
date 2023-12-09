@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { IconButton, Skeleton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Send } from '@mui/icons-material';
@@ -34,7 +34,7 @@ const ChatArea = () => {
     };
     axios
       .post(
-        'https://live-chat-server-2nte.onrender.com/on-n73eb1h7o-shridhar-kandikatla-s-projects.vercel.app/message/',
+        'https://live-chat-server-2nte.onrender.com/message',
         {
           content: messageContent,
           chatId: chat_id,
@@ -183,11 +183,6 @@ const ChatArea = () => {
               value={messageContent}
               onChange={(e) => {
                 setMessageContent(e.target.value);
-              }}
-              onClick={() => {
-                sendMessage();
-                setMessageContent('');
-                setRefresh(!refresh);
               }}
               onKeyDown={(event) => {
                 if (event.code == 'Enter') {

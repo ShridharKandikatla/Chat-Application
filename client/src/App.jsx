@@ -23,6 +23,7 @@ function App() {
             <Route path='groups' element={<Groups />} />
             <Route path='create-group' element={<CreateGroup />} />
             <Route path='chatlist' element={<ChatList />} />
+            <Route path='chatlist/chat/:_id' element={<ChatArea />} />
           </Route>
         </Routes>
       </div>
