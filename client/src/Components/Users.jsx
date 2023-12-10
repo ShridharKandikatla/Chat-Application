@@ -27,7 +27,7 @@ const Users = () => {
       },
     };
     axios
-      .get('https://live-chat-server-2nte.onrender.com/user/fetchUsers', config)
+      .get('http://localhost:5000/user/fetchUsers', config)
       .then((response) => {
         setUsers(response.data);
       });
@@ -99,7 +99,7 @@ const Users = () => {
                 };
                 axios
                   .post(
-                    'https://live-chat-server-2nte.onrender.com/chat/access',
+                    'http://localhost:5000/chat/access',
                     {
                       userId: user._id,
                     },

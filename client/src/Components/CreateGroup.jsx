@@ -23,7 +23,7 @@ const CreateGroup = () => {
     };
     axios
       .post(
-        'https://live-chat-server-2nte.onrender.com/chat/createGroup',
+        'http://localhost:5000/chat/createGroup',
         { name: groupName, users: `[]` },
         config
       )

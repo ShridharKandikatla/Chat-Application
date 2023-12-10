@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../Features/ThemeSlice';
 import { myContext } from './MainContainer';
 import axios from 'axios';
+import socket from '../Features/socket';
 
 const Sidebar = () => {
   const [conversations, setConversation] = useState([]);
@@ -31,11 +32,9 @@ const Sidebar = () => {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
-    axios
-      .get('https://live-chat-server-2nte.onrender.com/chat/', config)
-      .then((response) => {
-        setConversation(response.data);
-      });
+    axios.get('http://localhost:5000/chat/', config).then((response) => {
+      setConversation(response.data);
+    });
   }, [refresh]);
 
   return (
@@ -140,6 +139,7 @@ const Sidebar = () => {
                 className='conversation-container'
                 onClick={() => {
                   navigate('chat/' + conversation._id + '&' + chatname);
+                  socket.emit('join chat', conversation._id);
                 }}
               >
                 <p className={'con-icon' + (lightTheme ? ' dark' : '')}>

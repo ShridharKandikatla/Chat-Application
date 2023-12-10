@@ -34,7 +34,7 @@ const Login = () => {
       };
 
       const response = await axios.post(
-        'https://live-chat-server-2nte.onrender.com/user/register',
+        'http://localhost:5000/user/register',
         data,
         config
       );
@@ -67,7 +67,7 @@ const Login = () => {
         },
       };
       const response = await axios.post(
-        'https://live-chat-server-2nte.onrender.com/user/login',
+        'http://localhost:5000/user/login',
         data,
         config
       );

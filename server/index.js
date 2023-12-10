@@ -59,14 +59,12 @@ io.on('connection', (socket) => {
     socket.join(room);
   });
 
-  socket.on('new message', (newMessageStatus) => {
-    if (!newMessageStatus.chat.users) {
-      console.log('chat.users not defined');
-      return;
+  socket.on('new message', (chatId, newMessageStatus) => {
+    const users = newMessageStatus.chat.users;
+    if (!users) {
+      console.log('chat users not defined');
+    } else {
+      io.to(chatId).emit('message received', newMessageStatus);
     }
-    newMessageStatus.chat.users.forEach((user) => {
-      if (user._id == newMessageStatus.sender._id) return;
-      socket.in(user._id).emit('message recieved', newMessageStatus);
-    });
   });
 });

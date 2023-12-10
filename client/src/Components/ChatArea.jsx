@@ -9,14 +9,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { myContext } from './MainContainer';
-import { io } from 'socket.io-client';
+import socket from '../Features/socket';
 
-var socket;
 const ChatArea = () => {
   const { refresh, setRefresh } = useContext(myContext);
   const [loaded, setloaded] = useState(false);
   const [messageContent, setMessageContent] = useState('');
-  const [socketConnectionStatus, setSocketConnectionStatus] = useState(false);
   const dyParams = useParams();
   const [chat_id, chat_user] = dyParams._id.split('&');
   const [allMessages, setAllMessages] = useState([]);
@@ -34,7 +32,7 @@ const ChatArea = () => {
     };
     axios
       .post(
-        'https://live-chat-server-2nte.onrender.com/message',
+        'http://localhost:5000/message',
         {
           content: messageContent,
           chatId: chat_id,
@@ -42,19 +40,11 @@ const ChatArea = () => {
         config
       )
       .then(({ data }) => {
-        socket.emit('new message', data);
+        socket.emit('new message', chat_id, data);
         setMessageContent('');
         setRefresh(!refresh);
       });
   };
-
-  useEffect(() => {
-    socket = io('https://live-chat-server-2nte.onrender.com/');
-    socket.emit('setup', userData);
-    socket.on('connected', () => {
-      setSocketConnectionStatus(!socketConnectionStatus);
-    });
-  }, []);
 
   useEffect(() => {
     const config = {
@@ -63,14 +53,10 @@ const ChatArea = () => {
       },
     };
     axios
-      .get(
-        'https://live-chat-server-2nte.onrender.com/message/' + chat_id,
-        config
-      )
+      .get('http://localhost:5000/message/' + chat_id, config)
       .then(({ data }) => {
         setAllMessages(data);
         setloaded(true);
-        socket.emit('join chat', chat_id);
       });
     setAllMessagesCopy(allMessages);
   }, [refresh, chat_id, userData.data.token]);
@@ -78,9 +64,10 @@ const ChatArea = () => {
   useEffect(() => {
     socket.on('message received', (newMessage) => {
       if (!allMessagesCopy || allMessagesCopy._id != newMessage._id) {
-        // setAllMessages([...allMessages, newMessage]);
+        setAllMessages([...allMessages, newMessage]);
+        setRefresh(!refresh);
       } else {
-        setAllMessagesCopy([...allMessages, newMessage]);
+        // setAllMessages([...allMessages, newMessage]);
       }
     });
   });
@@ -146,7 +133,7 @@ const ChatArea = () => {
                 };
                 axios
                   .put(
-                    'https://live-chat-server-2nte.onrender.com/chat/groupExit',
+                    'http://localhost:5000/chat/groupExit',
                     {
                       chatId: chat_id,
                       userId: userData.data._id,
