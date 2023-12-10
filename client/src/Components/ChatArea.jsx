@@ -32,7 +32,7 @@ const ChatArea = () => {
     };
     axios
       .post(
-        'http://localhost:5000/message',
+        'https://live-chat-server-2nte.onrender.com/message',
         {
           content: messageContent,
           chatId: chat_id,
@@ -53,7 +53,10 @@ const ChatArea = () => {
       },
     };
     axios
-      .get('http://localhost:5000/message/' + chat_id, config)
+      .get(
+        'https://live-chat-server-2nte.onrender.com/message/' + chat_id,
+        config
+      )
       .then(({ data }) => {
         setAllMessages(data);
         setloaded(true);
@@ -133,7 +136,7 @@ const ChatArea = () => {
                 };
                 axios
                   .put(
-                    'http://localhost:5000/chat/groupExit',
+                    'https://live-chat-server-2nte.onrender.com/chat/groupExit',
                     {
                       chatId: chat_id,
                       userId: userData.data._id,

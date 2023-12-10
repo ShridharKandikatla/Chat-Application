@@ -32,9 +32,11 @@ const Sidebar = () => {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
-    axios.get('http://localhost:5000/chat/', config).then((response) => {
-      setConversation(response.data);
-    });
+    axios
+      .get('https://live-chat-server-2nte.onrender.com/chat/', config)
+      .then((response) => {
+        setConversation(response.data);
+      });
   }, [refresh]);
 
   return (

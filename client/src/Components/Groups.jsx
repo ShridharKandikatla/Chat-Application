@@ -27,7 +27,10 @@ const Groups = () => {
       },
     };
     axios
-      .get('http://localhost:5000/chat/fetchGroups', config)
+      .get(
+        'https://live-chat-server-2nte.onrender.com/chat/fetchGroups',
+        config
+      )
       .then((response) => {
         setGroups(response.data);
       });
@@ -85,7 +88,7 @@ const Groups = () => {
                 };
                 axios
                   .put(
-                    'http://localhost:5000/chat/addSelfToGroup',
+                    'https://live-chat-server-2nte.onrender.com/chat/addSelfToGroup',
                     {
                       chatId: group._id,
                       userId: userData.data._id,
