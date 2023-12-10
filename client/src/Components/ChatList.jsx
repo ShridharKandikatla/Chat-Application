@@ -32,6 +32,12 @@ const ChatList = () => {
       });
   }, [refresh]);
 
+  useEffect(() => {
+    socket.on('message received', () => {
+      setRefresh(!refresh);
+    });
+  });
+
   return (
     <div className='sb-chatlist-container'>
       <div className={'sb-chatlistsearch' + (lightTheme ? ' dark' : '')}>
