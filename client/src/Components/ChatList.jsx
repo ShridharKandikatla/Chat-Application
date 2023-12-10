@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import { myContext } from './MainContainer';
 import axios from 'axios';
+import socket from '../Features/socket';
 
 const ChatList = () => {
   const [conversations, setConversation] = useState([]);
@@ -92,6 +93,7 @@ const ChatList = () => {
                 className='conversation-container'
                 onClick={() => {
                   navigate('chat/' + conversation._id + '&' + chatname);
+                  socket.emit('join chat', conversation._id);
                 }}
               >
                 <p className={'con-icon' + (lightTheme ? ' dark' : '')}>
