@@ -14,30 +14,50 @@ import axios from 'axios';
 import socket from '../Features/socket';
 
 const Sidebar = () => {
-  const [conversations, setConversation] = useState([]);
+  const [conversations, setConversations] = useState([]);
   const { refresh, setRefresh } = useContext(myContext);
   const lightTheme = useSelector((state) => state.themeKey);
   const userData = JSON.parse(localStorage.getItem('userData'));
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  if (!userData) {
-    console.log('no user');
-    navigate('/');
-  }
-
   useEffect(() => {
+    if (!userData) {
+      console.log('no user');
+      navigate('/');
+      return;
+    }
+
     const config = {
       headers: {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
-    axios
-      .get('https://live-chat-server-2nte.onrender.com/chat/', config)
-      .then((response) => {
-        setConversation(response.data);
-      });
-  }, [refresh]);
+
+    const fetchConversations = async () => {
+      try {
+        const response = await axios.get(
+          'https://live-chat-server-2nte.onrender.com/chat/',
+          config
+        );
+        setConversations(response.data);
+      } catch (error) {
+        console.error('Failed to fetch conversations', error);
+      }
+    };
+
+    fetchConversations();
+
+    const messageReceivedListener = () => {
+      setRefresh((prevRefresh) => !prevRefresh);
+    };
+
+    socket.on('message received', messageReceivedListener);
+
+    return () => {
+      socket.off('message received', messageReceivedListener);
+    };
+  }, [refresh, setRefresh, navigate, userData]);
 
   return (
     <div className='sidebar-container'>

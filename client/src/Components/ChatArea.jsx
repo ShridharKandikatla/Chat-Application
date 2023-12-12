@@ -13,7 +13,7 @@ import socket from '../Features/socket';
 
 const ChatArea = () => {
   const { refresh, setRefresh } = useContext(myContext);
-  const [loaded, setloaded] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const [messageContent, setMessageContent] = useState('');
   const dyParams = useParams();
   const [chat_id, chat_user] = dyParams._id.split('&');
@@ -42,7 +42,7 @@ const ChatArea = () => {
       .then(({ data }) => {
         socket.emit('new message', chat_id, data);
         setMessageContent('');
-        setRefresh(!refresh);
+        setRefresh((prevRefresh) => !prevRefresh);
       });
   };
 
@@ -59,21 +59,25 @@ const ChatArea = () => {
       )
       .then(({ data }) => {
         setAllMessages(data);
-        setloaded(true);
+        setLoaded(true);
       });
     setAllMessagesCopy(allMessages);
   }, [refresh, chat_id, userData.data.token]);
 
   useEffect(() => {
-    socket.on('message received', (newMessage) => {
-      if (!allMessagesCopy || allMessagesCopy._id != newMessage._id) {
-        setAllMessages([...allMessages, newMessage]);
-        setRefresh(!refresh);
-      } else {
-        // setAllMessages([...allMessages, newMessage]);
+    const handleNewMessage = (newMessage) => {
+      if (!allMessagesCopy || allMessagesCopy._id !== newMessage._id) {
+        setAllMessages((prevMessages) => [...prevMessages, newMessage]);
+        setRefresh((prevRefresh) => !prevRefresh);
       }
-    });
-  });
+    };
+
+    socket.on('message received', handleNewMessage);
+
+    return () => {
+      socket.off('message received', handleNewMessage);
+    };
+  }, [allMessagesCopy]);
 
   if (!loaded) {
     return (
@@ -144,7 +148,7 @@ const ChatArea = () => {
                     config
                   )
                   .then(() => {
-                    setRefresh(!refresh);
+                    setRefresh((prevRefresh) => !prevRefresh);
                     navigate('/app/welcome');
                   });
               }}
@@ -166,7 +170,6 @@ const ChatArea = () => {
                 }
               })}
           </div>
-          {/* <div ref={messagesEndRef} className='BOTTOM' /> */}
           <div className={'text-input-area' + (lightTheme ? ' dark' : '')}>
             <input
               placeholder='Type a Message'
@@ -176,7 +179,7 @@ const ChatArea = () => {
                 setMessageContent(e.target.value);
               }}
               onKeyDown={(event) => {
-                if (event.code == 'Enter') {
+                if (event.code === 'Enter') {
                   sendMessage();
                 }
               }}
