@@ -1,4 +1,4 @@
-#Real-time Chat Application
+# Real-time Chat Application
 
 ## Objective
 Developed a real-time chat application to facilitate instant communication between users.
