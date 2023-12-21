@@ -1,5 +1,18 @@
 # Real-time Chat Application
 
+## How to Run
+### Client
+1. Navigate to the `client` directory.
+2. Run `npm install` to install dependencies.
+3. Execute `npm start` to launch the React.js front-end.
+
+### Server
+1. Go to the `server` directory.
+2. Run `npm install` to install server dependencies.
+3. Start the server by running `npm start`.
+
+Now, you can access the real-time chat application by visiting the specified address in your browser.
+
 ## Objective
 Developed a real-time chat application to facilitate instant communication between users.
 
