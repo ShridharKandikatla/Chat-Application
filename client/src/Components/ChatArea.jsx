@@ -30,6 +30,7 @@ const ChatArea = () => {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
+    console.log('Sending message:', messageContent);
     axios
       .post(
         'https://live-chat-server-2nte.onrender.com/message',
@@ -62,22 +63,17 @@ const ChatArea = () => {
         setLoaded(true);
       });
     setAllMessagesCopy(allMessages);
+    console.log('Fetching messages');
   }, [refresh, chat_id, userData.data.token]);
 
-  useEffect(() => {
-    const handleNewMessage = (newMessage) => {
-      if (!allMessagesCopy || allMessagesCopy._id !== newMessage._id) {
-        setAllMessages((prevMessages) => [...prevMessages, newMessage]);
-        setRefresh((prevRefresh) => !prevRefresh);
-      }
-    };
+  const handleNewMessage = (newMessage) => {
+    if (!allMessagesCopy || allMessagesCopy._id !== newMessage._id) {
+      // setAllMessages((prevMessages) => [...prevMessages, newMessage]);
+      setRefresh((prevRefresh) => !prevRefresh);
+    }
+  };
 
-    socket.on('message received', handleNewMessage);
-
-    return () => {
-      socket.off('message received', handleNewMessage);
-    };
-  }, [allMessagesCopy]);
+  socket.on('message received', handleNewMessage);
 
   if (!loaded) {
     return (
