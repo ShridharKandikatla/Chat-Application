@@ -13,6 +13,7 @@ app.use(
     origin: [
       'https://chat-application-unpr.onrender.com',
       'http://localhost:3000',
+      'https://chat-application.shridharkandika.repl.co',
     ],
     credentials: true,
   })
@@ -43,6 +44,7 @@ const io = require('socket.io')(server, {
     origin: [
       'https://chat-application-unpr.onrender.com',
       'http://localhost:3000',
+      'https://chat-application.shridharkandika.repl.co'
     ],
     credentials: true,
   },
