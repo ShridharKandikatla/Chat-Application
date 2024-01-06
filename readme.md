@@ -33,6 +33,4 @@ As a Full Stack Developer, I handled both front-end and back-end development, en
 Overcame synchronization issues in real-time updates by implementing efficient data syncing mechanisms. Managed potential security concerns associated with user authentication.
 
 ## Outcomes
-Successfully created a robust chat application with instant messaging capabilities. Users experienced seamless communication, contributing to increased user engagement and satisfaction.
-
-This project showcases your proficiency as a Full Stack Developer and your ability to create real-time applications, enhancing your resume's appeal to potential employers.
+Successfully created a robust chat application with instant messaging capabilities and seamless communication.
