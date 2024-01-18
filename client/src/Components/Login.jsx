@@ -38,9 +38,9 @@ const Login = () => {
         data,
         config
       );
-      navigate('/app/welcome');
-      localStorage.setItem('userData', JSON.stringify(response.data));
+      localStorage.setItem('userData', JSON.stringify(response));
       setLoading(false);
+      navigate('/app/welcome');
     } catch (error) {
       if (error.response.status == 430) {
         setsignUpStatus({

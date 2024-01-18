@@ -9,7 +9,7 @@ const Welcome = () => {
     <div className={'welcome-container' + (lightTheme ? ' dark' : '')}>
       <img src={logo} alt='logo' className='welcome-logo' />
       <p>
-        Hi <b>{userData.data.name}</b>, Welcome to Live Chat{' '}
+        Hey! <b>{userData.data.name}</b>, Welcome to Live Chat{' '}
       </p>
     </div>
   );
