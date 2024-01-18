@@ -44,7 +44,7 @@ const io = require('socket.io')(server, {
     origin: [
       'https://chat-application-unpr.onrender.com',
       'http://localhost:3000',
-      'https://chat-application.shridharkandika.repl.co'
+      'https://chat-application.shridharkandika.repl.co',
     ],
     credentials: true,
   },
@@ -61,12 +61,15 @@ io.on('connection', (socket) => {
     socket.join(room);
   });
 
-  socket.on('new message', (chatId, newMessageStatus) => {
-    const users = newMessageStatus.chat.users;
-    if (!users) {
-      console.log('chat users not defined');
-    } else {
-      io.to(chatId).emit('message received', newMessageStatus);
+  socket.on('new message', (newMessageStatus) => {
+    console.log('new console line');
+    console.log(newMessageStatus);
+    if (!newMessageStatus.chat) {
+      console.log('chat.users not defined');
     }
+    newMessageStatus.chat.users.forEach((user) => {
+      if (user._id == newMessageStatus.sender._id) return;
+      socket.in(user._id).emit('message recieved', newMessageStatus);
+    });
   });
 });

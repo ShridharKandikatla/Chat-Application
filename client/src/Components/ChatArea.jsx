@@ -1,20 +1,23 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { IconButton, Skeleton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Send } from '@mui/icons-material';
 import MessageOthers from './MessageOthers';
 import MessageSelf from './MessageSelf';
+import '../CSS/myStyles.css';
 import { useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { myContext } from './MainContainer';
-import socket from '../Features/socket';
+import { io } from 'socket.io-client';
 
+var socket;
 const ChatArea = () => {
   const { refresh, setRefresh } = useContext(myContext);
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setloaded] = useState(false);
   const [messageContent, setMessageContent] = useState('');
+  const [socketConnectionStatus, setSocketConnectionStatus] = useState(false);
   const dyParams = useParams();
   const [chat_id, chat_user] = dyParams._id.split('&');
   const [allMessages, setAllMessages] = useState([]);
@@ -30,10 +33,9 @@ const ChatArea = () => {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
-    console.log('Sending message:', messageContent);
     axios
       .post(
-        'https://live-chat-server-2nte.onrender.com/message',
+        'http://localhost:5000/message/',
         {
           content: messageContent,
           chatId: chat_id,
@@ -41,11 +43,18 @@ const ChatArea = () => {
         config
       )
       .then(({ data }) => {
-        socket.emit('new message', chat_id, data);
-        setMessageContent('');
-        setRefresh((prevRefresh) => !prevRefresh);
+        socket.emit('new message', data);
+        setRefresh(!refresh);
       });
   };
+
+  useEffect(() => {
+    socket = io('http://localhost:5000');
+    socket.emit('setup', userData);
+    socket.on('connected', () => {
+      setSocketConnectionStatus(!socketConnectionStatus);
+    });
+  }, []);
 
   useEffect(() => {
     const config = {
@@ -54,26 +63,24 @@ const ChatArea = () => {
       },
     };
     axios
-      .get(
-        'https://live-chat-server-2nte.onrender.com/message/' + chat_id,
-        config
-      )
+      .get('http://localhost:5000/message/' + chat_id, config)
       .then(({ data }) => {
         setAllMessages(data);
-        setLoaded(true);
+        setloaded(true);
+        socket.emit('join chat', chat_id);
       });
     setAllMessagesCopy(allMessages);
-    console.log('Fetching messages');
-  }, [refresh, chat_id, userData.data.token]);
+  }, [refresh, chat_id, userData.data.token, allMessages]);
 
-  const handleNewMessage = (newMessage) => {
-    if (!allMessagesCopy || allMessagesCopy._id !== newMessage._id) {
-      // setAllMessages((prevMessages) => [...prevMessages, newMessage]);
-      setRefresh((prevRefresh) => !prevRefresh);
-    }
-  };
-
-  socket.on('message received', handleNewMessage);
+  useEffect(() => {
+    socket.on('message received', (newMessage) => {
+      if (!allMessagesCopy || allMessagesCopy._id != newMessage._id) {
+        // setAllMessages([...allMessages, newMessage]);
+      } else {
+        setAllMessagesCopy([...allMessages, newMessage]);
+      }
+    });
+  });
 
   if (!loaded) {
     return (
@@ -119,7 +126,7 @@ const ChatArea = () => {
         >
           <div className={'chatArea-header' + (lightTheme ? ' dark' : '')}>
             <p className={'con-icon' + (lightTheme ? ' dark' : '')}>
-              {chat_user[0].toUpperCase()}
+              {chat_user[0].toUpperCase() || ''}
             </p>
             <div className={'header-text' + (lightTheme ? ' dark' : '')}>
               <p className={'con-title' + (lightTheme ? ' dark' : '')}>
@@ -136,7 +143,7 @@ const ChatArea = () => {
                 };
                 axios
                   .put(
-                    'https://live-chat-server-2nte.onrender.com/chat/groupExit',
+                    'http://localhost:5000/chat/groupExit',
                     {
                       chatId: chat_id,
                       userId: userData.data._id,
@@ -144,7 +151,7 @@ const ChatArea = () => {
                     config
                   )
                   .then(() => {
-                    setRefresh((prevRefresh) => !prevRefresh);
+                    setRefresh(!refresh);
                     navigate('/app/welcome');
                   });
               }}
@@ -166,6 +173,7 @@ const ChatArea = () => {
                 }
               })}
           </div>
+          {/* <div ref={messagesEndRef} className='BOTTOM' /> */}
           <div className={'text-input-area' + (lightTheme ? ' dark' : '')}>
             <input
               placeholder='Type a Message'
@@ -175,8 +183,10 @@ const ChatArea = () => {
                 setMessageContent(e.target.value);
               }}
               onKeyDown={(event) => {
-                if (event.code === 'Enter') {
+                if (event.code == 'Enter') {
                   sendMessage();
+                  setMessageContent('');
+                  setRefresh(!refresh);
                 }
               }}
             />
@@ -184,6 +194,8 @@ const ChatArea = () => {
               className={'icon' + (lightTheme ? ' dark' : '')}
               onClick={() => {
                 sendMessage();
+                setMessageContent('');
+                setRefresh(!refresh);
               }}
             >
               <Send />
